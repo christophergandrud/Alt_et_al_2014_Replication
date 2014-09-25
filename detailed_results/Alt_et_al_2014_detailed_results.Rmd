@@ -1,0 +1,110 @@
+---
+title: "Replication of Alt et al. (2014) with Corrected Election Timing Data"
+author: "Christopher Gandrud"
+date: "25 September 2014"
+output: pdf_document
+bibliography: rep.bib
+---
+
+```{r, include=FALSE}
+# Uses output files created in Stata 12.1 in data_source/sup003_updated.do
+
+# Set working directory, change as needed
+setwd('/git_repositories/Alt_et_al_2014_Replication/')
+
+# Load packages
+library(magrittr)
+library(DataCombine)
+
+# Load individual tables
+files <- list.files('Stata_temp/')
+
+for (i in files){
+    if (i == files[[1]]) {
+        comb <- foreign::read.dta(paste0('Stata_temp/', i))
+    }
+    else if (i != files[[1]]) {
+        temp <- foreign::read.dta(paste0('Stata_temp/', i))
+        temp <- temp[1:94, ] # drop ancillary rows
+        comb <- data.frame(comb, temp)  
+    }
+}
+
+#### Create individual comparative tables ####
+
+# Clean up variable names
+from <- c(comb[grep('*_coef', comb), 1][1:9], '^.*?_stderr')
+to <- c('Electoral Term', 'Electoral term x Budget transparency',
+              'SGP', 'SGP x Budget transparency', 'Slump',
+              'Slump x Budget transparency', 'Boom',
+              'Boom x Budget transparency','Banking crisis', '')
+replacements <- data.frame(from, to)
+
+table_clean <- function(x){
+    names(x) <- c('Dependent variable', 'Original', 'Corrected')
+    x <- FindReplace(x, Var = 'Dependent variable', replaceData = replacements,
+                     exact = F)
+    return(x)
+}
+
+balance <- comb[1:18, c(1, 2, 4)] %>% table_clean()
+debt_change <- comb[1:18, c(1, 6, 8)] %>% table_clean()
+sfa <- comb[1:18, c(1, 10, 12)] %>% table_clean()
+sfa_noGreece <- comb[1:18, c(1, 14, 16)] %>% table_clean()
+net_acq <- comb[1:18, c(1, 18, 20)] %>% table_clean()
+net_liab <- comb[1:18, c(1, 22, 24)] %>% table_clean()
+```
+
+> This note replicates [@Alt2014] using using corrected election timing data.
+A key proposition in this paper--that politicians used 'fiscal gimmickry conditional
+on the level of transparency--was tested with election timing data from
+[@DPI2012, updated 2012]. This data, however, has serious reliability and validity
+issues. The purpose of this note is to discover if the main findings in [@Alt2014]
+are robust to a corrected election timing variable. Overall the results are robust,
+though the estimated effects' magnitude and statistical significance are lower than
+originally reported.
+
+[@Alt2014] recently made an important contribution to the study of fiscal gimmickry
+
+## Replication results
+
+The following tables replicate the main result from [@Alt2014].
+
+### Balance
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(balance)
+```
+
+### Debt change
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(debt_change)
+```
+
+### SFA
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(sfa)
+```
+
+### SFA (excluding Greece)
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(sfa_noGreece)
+```
+
+### Net acquisition (+) of shares and other equity
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(net_acq)
+```
+
+### Net incurrence (-) of other liabilities
+
+```{r, echo=FALSE, results='asis'}
+knitr::kable(net_liab)
+```
+
+
+## References
