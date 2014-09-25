@@ -1,7 +1,7 @@
 Alt et al. (2014) Replication
 ==========================
 
-This repository includes a replication of [Alt et al. (2014)](http://dx.doi.org/10.1017/S0007123414000064) 
+> This repository includes a replication of [Alt et al. (2014)](http://dx.doi.org/10.1017/S0007123414000064) 
 using corrected election timing data.
 
 Christopher Gandrud
