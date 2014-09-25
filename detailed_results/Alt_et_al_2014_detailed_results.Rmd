@@ -57,18 +57,111 @@ net_liab <- comb[1:18, c(1, 22, 24)] %>% table_clean()
 
 > This note replicates [@Alt2014] using using corrected election timing data.
 A key proposition in this paper--that politicians used 'fiscal gimmickry conditional
-on the level of transparency--was tested with election timing data from
-[@DPI2012, updated 2012]. This data, however, has serious reliability and validity
+on the level of transparency--was tested with election timing data from the 2012 release of
+[@DPI2012]. This data, however, has serious reliability and validity
 issues. The purpose of this note is to discover if the main findings in [@Alt2014]
 are robust to a corrected election timing variable. Overall the results are robust,
 though the estimated effects' magnitude and statistical significance are lower than
 originally reported.
 
-[@Alt2014] recently made an important contribution to the study of fiscal gimmickry
+@Alt2014 recently made an important contribution to understanding under what conditions European politicians use creative accounting--fiscal gimmicks. In particular, they find evidence for an electoral cycle in fiscal gimmickry. Politicians are more likely to use creative accounting closer to approaching elections in order to forestall adjustments that would hurt voters while also presenting an image of their finances that pleases bondholders and, in the European Union, European officials in charge of monitoring the stability and growth pact. Opacity is required for this behaviour to work. As such, they find that  higher fiscal transparency can considerably decrease creative accounting, even before elections.
 
-## Replication results
+Their empirical analysis clearly requires a reliable and valid measure of election timing. As such, they choose to use the chief executive election timing variable[^varname] from the 2012 version of the Database of Political Institutions (DPI) [@DPI2012].[^dpiurl] The DPI data set is widely used in political science
 
-The following tables replicate the main result from [@Alt2014].
+## Problems with DPI government election timing data
+
+The
+[2012 codebook](http://siteresources.worldbank.org/INTRES/Resources/469232-1107449512766/DPI2012_Codebook2.pdf)
+classifies the **yrcurnt** election timing variable as the years left in the chief
+executive's current term such that:
+
+> ''a '0' is scored in an election year, and n-1 in the year after an election, where n is the length of the term. In countries where early elections can be called, YRCURNT is set to the de jure term limit or schedule of elections, but resets in the case of early elections.''
+
+### Issues in the 2012 data
+
+The original variable has a number of issues that make it problematic for studying
+the effect of election timing on government policymaking. Primarily:
+
+#### Validity concerns
+
+- For a number of countries (e.g. Austria) the elections recorded are for a largely
+figurehead president. This can affect both when election is recorded and how many
+years until the next election as figurehead presidents often have longer terms than
+parliaments. In these cases the 2012 version of the variable is not
+a valid measure of *government* election timing.
+
+- Some countries are less clear cut in that they are semi-presidential. Nonetheless,
+in a number of these cases (e.g. Romania), however, the PM is the clear leader of the government
+and the domestic policy agenda. These powers are most relevant for studying things
+like public budgeting.
+
+#### Reliability concerns
+
+- There are many instances where election years are not recorded as 0, as the
+coding scheme defines. See table below for details.
+
+## Updated Data
+
+To correct these issues, I validated the DPI election timing data was for 27 European Union
+countries (the same sample as @Alt2014 used). I validated data from 1990 to the present 
+with the European Election Database [-@ElectionsDataBase].
+These election dates were corroborated with data from Wikipedia. Election dates from
+before 1990 are also from Wikipedia. All elections examined in the European Election Database
+had a corresponding detailed Wikipedia entry describing key election features, including the election date and vote distributions. The corrected data can be found at <https://github.com/christophergandrud/yrcurnt_corrected>. The full list of changes are given in the following table.
+
+### List of Changes to DPI Cheif Executive Election Timing Variable (**yrcurnt**)
+
+--------------------------------------------------------------------------------
+ Country     Changes
+------------ ----------------------------------------------------------------------
+ Austria     Use parliamentary rather than (figurehead) presidential elections.
+
+ Belgium     Corrects missing 2010 election year.
+
+ Denmark     Corrects missing 2001 and 2007 elections.
+
+ Estonia     Corrects 1995, 1999, 2003, 2007, and 2011 elections.
+             Also counting originally started at 4, but should start at
+             3 as there is a 4 year term limit (not 5).
+
+ Germany     Corrects missing 2005 election.
+
+ Greece      Corrects missing 2007, 2009, 2012 election years.
+
+ Ireland     Corrects missing 2011 election.
+
+ Italy       Corrects missing 2008 election.
+
+ Lithuania   Use parliamentary rather than presidential elections.
+             It is a semi-presidential system where the president
+             appoints the PM, the legislature's approval is needed.
+             PM is more responsible for domestic policy.
+
+ Latvia      Corrects missing 2006, 2010, 2011 election years.
+
+ Netherlands Corrects missing 2003 and 2006 elections.
+
+ Portugal    Corrects missing 1979, 1999, and 2011 elections.
+
+ Romania     Semi-presidential where the president appoints the PM, but
+             they must be approved by the parliament and the PM is both
+             head of government and sets the legislative agenda.
+             Before 2008 presidential and parliamentary elections had
+             happened in the same year.
+
+ Slovenia    Use parliamentary rather than (figurehead) presidential elections.
+
+ Slovakia    Corrects missing 2012 election.
+
+ Spain       Corrects missing 1989, 1996, and 2011 elections.
+
+ UK          Corrected missing 2001 and 2005 elections.
+--------------------------------------------------------------------------------
+
+## Results from replication of Alt et al. (2014) with corrected election timing data
+
+The following tables replicate the main results from [@Alt2014]. Their original results
+tables can be found in Appendix 7 attached to the article.[^supSource] The replications were done in Stata 12.1 using the Do-file and data made available by the authors.[^dofile] In the following tables *Election timing* indicates the **yrcurnt** (original or corrected) variable.
 
 ### Balance
 
@@ -108,3 +201,12 @@ knitr::kable(net_liab)
 
 
 ## References
+
+[^varname]: YRCURNT
+
+[^dpiurl]: Available at: <http://go.worldbank.org/2EAGGLRZ40>.
+Accessed September 2014.
+
+[^supSource]: Appendix 7 can be found at: <http://journals.cambridge.org/action/displaySuppMaterial?cupCode=1&type=4&jid=JPS&volumeId=44&issueId=04&aid=9345189&sessionId=7478A414E0A5039EB5DDE864C1B54332.journals>.
+
+[^dofile]: These supplemental materials can be found at: <http://journals.cambridge.org/action/displaySuppMaterial?cupCode=1&type=4&jid=JPS&volumeId=44&issueId=04&aid=9345189&sessionId=7478A414E0A5039EB5DDE864C1B54332.journals>
