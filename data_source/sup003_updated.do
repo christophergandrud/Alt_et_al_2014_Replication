@@ -6,9 +6,17 @@
 **** 25 September 2014
 **** With corrected yrcurnt data
 **** See https://github.com/christophergandrud/yrcurnt_corrected
+**** Using Stata 12.1
 ********************************************************************************
 
-set mem 100mset more offencode worldbank_code, generate(country2)tsset country2 yeartab year, gen(y)* Deficit, debt change, and SFA measuresgen balance_gdp_edf = netlend_ublge3gen debt_change = grossdebt_udgg2 - l.grossdebt_udgg2gen debt_gdp_change = (debt_change / gdp_uvgd4)*100gen sfa_new = debt_gdp_change + netlend_ublge3* Transparency measuregen altlassenindex10b = al10_transparency / 11gen obi2010 = obi_10score / 100reg obi2010 altlassenindex10bpredict obi2reg obi2010 imf_rosc_transparencypredict obi3replace obi3 = obi2010 if obi2010~=.replace obi3 = obi2 if obi3==.* Slump and boom variablesgen slump = 0replace slump = gap_avggdt if gap_avggdt<0replace slump = . if gap_avggdt==.
+set mem 100m
+set more off
+
+********** Added in Replication 25 September 2014 ******************************
+***** Change working directory as needed.
+cd "/git_repositories/Alt_et_al_2014_Replication/"
+
+use "data_source/sup002_corrected.dta", clear********************************************************************************encode worldbank_code, generate(country2)tsset country2 yeartab year, gen(y)* Deficit, debt change, and SFA measuresgen balance_gdp_edf = netlend_ublge3gen debt_change = grossdebt_udgg2 - l.grossdebt_udgg2gen debt_gdp_change = (debt_change / gdp_uvgd4)*100gen sfa_new = debt_gdp_change + netlend_ublge3* Transparency measuregen altlassenindex10b = al10_transparency / 11gen obi2010 = obi_10score / 100reg obi2010 altlassenindex10bpredict obi2reg obi2010 imf_rosc_transparencypredict obi3replace obi3 = obi2010 if obi2010~=.replace obi3 = obi2 if obi3==.* Slump and boom variablesgen slump = 0replace slump = gap_avggdt if gap_avggdt<0replace slump = . if gap_avggdt==.
 gen slump2 = abs(slump)
 gen slump2_obi3 = slump2 * obi3
 gen boom = 0replace boom = gap_avggdt if gap_avggdt>0replace boom = . if gap_avggdt==.
@@ -24,53 +32,70 @@ gen yrcurnt_obi3 = dpi_yrcurnt * obi3
 ********** Added in Replication 25 September 2014 ******************************
 * Corrected election variable
 gen yrcurnt_corrected_obi3 = yrcurnt_corrected * obi3
-
+********************************************************************************
 
 
 * Stability and Growth Pactgen sgp = 0replace sgp = 1 if worldbank_code=="AUT" & year > 1997replace sgp = 1 if worldbank_code=="BEL" & year > 1997replace sgp = 1 if worldbank_code=="BGR" & year > 1997replace sgp = 1 if worldbank_code=="CYP" & year > 1997replace sgp = 1 if worldbank_code=="CZE" & year > 1997replace sgp = 1 if worldbank_code=="DEU" & year > 1997replace sgp = 1 if worldbank_code=="DNK" & year > 1997replace sgp = 1 if worldbank_code=="ESP" & year > 1997replace sgp = 1 if worldbank_code=="EST" & year > 1997replace sgp = 1 if worldbank_code=="FIN" & year > 1997replace sgp = 1 if worldbank_code=="FRA" & year > 1997replace sgp = 1 if worldbank_code=="GBR" & year > 1997replace sgp = 1 if worldbank_code=="GRC" & year > 1997replace sgp = 1 if worldbank_code=="HUN" & year > 1997replace sgp = 1 if worldbank_code=="IRL" & year > 1997replace sgp = 1 if worldbank_code=="ITA" & year > 1997replace sgp = 1 if worldbank_code=="LTU" & year > 1997replace sgp = 1 if worldbank_code=="LUX" & year > 1997replace sgp = 1 if worldbank_code=="LVA" & year > 1997replace sgp = 1 if worldbank_code=="MLT" & year > 1997replace sgp = 1 if worldbank_code=="NLD" & year > 1997replace sgp = 1 if worldbank_code=="POL" & year > 1997replace sgp = 1 if worldbank_code=="PRT" & year > 1997replace sgp = 1 if worldbank_code=="ROM" & year > 1997replace sgp = 1 if worldbank_code=="SVK" & year > 1997replace sgp = 1 if worldbank_code=="SVN" & year > 1997replace sgp = 1 if worldbank_code=="SWE" & year > 1997gen sgp_obi3 = sgp*obi3* Main EU-15 sample
 gen emu15 = 0replace emu15 = 1 if worldbank_code=="AUT"replace emu15 = 1 if worldbank_code=="BEL"replace emu15 = 1 if worldbank_code=="DEU"replace emu15 = 1 if worldbank_code=="ESP"replace emu15 = 1 if worldbank_code=="FIN"replace emu15 = 1 if worldbank_code=="FRA"replace emu15 = 1 if worldbank_code=="GRC"replace emu15 = 1 if worldbank_code=="IRL"replace emu15 = 1 if worldbank_code=="ITA"replace emu15 = 1 if worldbank_code=="LUX"replace emu15 = 1 if worldbank_code=="NLD"replace emu15 = 1 if worldbank_code=="PRT"replace emu15 = 1 if worldbank_code=="GBR"replace emu15 = 1 if worldbank_code=="DNK"replace emu15 = 1 if worldbank_code=="SWE"* Wider EU-27 samplegen eu27b = 0replace eu27b = 1 if worldbank_code=="AUT" & year >= 1995replace eu27b = 1 if worldbank_code=="BEL" & year >= 1952replace eu27b = 1 if worldbank_code=="BGR" & year >= 2007replace eu27b = 1 if worldbank_code=="CYP" & year >= 2004replace eu27b = 1 if worldbank_code=="CZE" & year >= 2004replace eu27b = 1 if worldbank_code=="DEU" & year >= 1952replace eu27b = 1 if worldbank_code=="DNK" & year >= 1973replace eu27b = 1 if worldbank_code=="ESP" & year >= 1986replace eu27b = 1 if worldbank_code=="EST" & year >= 2004replace eu27b = 1 if worldbank_code=="FIN" & year >= 1995replace eu27b = 1 if worldbank_code=="FRA" & year >= 1952replace eu27b = 1 if worldbank_code=="GBR" & year >= 1973replace eu27b = 1 if worldbank_code=="GRC" & year >= 1981replace eu27b = 1 if worldbank_code=="HUN" & year >= 2004replace eu27b = 1 if worldbank_code=="IRL" & year >= 1973replace eu27b = 1 if worldbank_code=="ITA" & year >= 1952replace eu27b = 1 if worldbank_code=="LTU" & year >= 2004replace eu27b = 1 if worldbank_code=="LUX" & year >= 1952replace eu27b = 1 if worldbank_code=="LVA" & year >= 2004replace eu27b = 1 if worldbank_code=="MLT" & year >= 2004replace eu27b = 1 if worldbank_code=="NLD" & year >= 1952replace eu27b = 1 if worldbank_code=="POL" & year >= 2004replace eu27b = 1 if worldbank_code=="PRT" & year >= 1986replace eu27b = 1 if worldbank_code=="ROM" & year >= 2007replace eu27b = 1 if worldbank_code=="SVK" & year >= 2004replace eu27b = 1 if worldbank_code=="SVN" & year >= 2004replace eu27b = 1 if worldbank_code=="SWE" & year >= 1995
 *** BJPS main regressions - graph in main paper and full results in Appendix 7 ***set more off* Balance, no lag, incl. Greecextreg balance_gdp_edf dpi_yrcurnt yrcurnt_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
-
 ********** Added in Replication 25 September 2014 ******************************
+    regsave using "Stata_temp/model1_1.dta", detail(all) replace table(Balance_Original, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
+
 xtreg balance_gdp_edf yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+    regsave using "Stata_temp/model1_2.dta", detail(all) replace table(Balance_Corrected, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
+********************************************************************************
 
 * Debt change, no lag, incl. Greece
 xtreg debt_gdp_change dpi_yrcurnt yrcurnt_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+********** Added in Replication 25 September 2014 ******************************
+    regsave using "Stata_temp/model2_1.dta", detail(all) replace table(DebtChange_Original, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
 
-********** Added in Replication 25 September 2014 ******************************\
 xtreg debt_gdp_change yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
-
+    regsave using "Stata_temp/model2_2.dta", detail(all) replace table(DebtChange_Corrected, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
+********************************************************************************
 
 * SFA, no lag, incl. Greece
 xtreg sfa_new dpi_yrcurnt yrcurnt_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
-
 ********** Added in Replication 25 September 2014 ******************************
+    regsave using "Stata_temp/model3_1.dta", detail(all) replace table(SFA_Original, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
+
 xtreg sfa_new yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+    regsave using "Stata_temp/model3_2.dta", detail(all) replace table(SFA_Corrected, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
+********************************************************************************
 
 * SFA, no lag, excl. Greece
 xtreg sfa_new dpi_yrcurnt yrcurnt_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & worldbank_code~="GRC" & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
-xtreg sfa_new obi3 yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & worldbank_code~="GRC" & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+********** Added in Replication 25 September 2014 ******************************
+    regsave using "Stata_temp/model4_1.dta", detail(all) replace table(SFA_NoGreece_Original, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
 
+xtreg sfa_new obi3 yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & worldbank_code~="GRC" & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+    regsave using "Stata_temp/model4_2.dta", detail(all) replace table(SFA_NoGreece_Corrected, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
+********************************************************************************
 
 * Shares and other equity, no lag, reduced sample excl. Greece and other countries with one observation or less
 xtreg eurostat_f5_gdp dpi_yrcurnt yrcurnt_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & (worldbank_code=="BEL" | worldbank_code=="ESP" | worldbank_code=="FRA" | worldbank_code=="GBR" | worldbank_code=="NLD" | worldbank_code=="PRT") & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
-
 ********** Added in Replication 25 September 2014 ******************************
-xtreg eurostat_f5_gdp yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & (worldbank_code=="BEL" | worldbank_code=="ESP" | worldbank_code=="FRA" | worldbank_code=="GBR" | worldbank_code=="NLD" | worldbank_code=="PRT") & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+    regsave using "Stata_temp/model5_1.dta", detail(all) replace table(NetAcquisitions_Original, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
 
+xtreg eurostat_f5_gdp yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & (worldbank_code=="BEL" | worldbank_code=="ESP" | worldbank_code=="FRA" | worldbank_code=="GBR" | worldbank_code=="NLD" | worldbank_code=="PRT") & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+    regsave using "Stata_temp/model5_2.dta", detail(all) replace table(NetAcquisitions_Corrected, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
+********************************************************************************
 
 * Other accounts payable, no lag, reduced sample excl. Greece and other countries with one observation or less
 xtreg eurostat_fli_oth_gdp dpi_yrcurnt yrcurnt_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & (worldbank_code=="BEL" | worldbank_code=="ESP" | worldbank_code=="FRA" | worldbank_code=="GBR" | worldbank_code=="NLD" | worldbank_code=="PRT") & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
-
 ********** Added in Replication 25 September 2014 ******************************
-xtreg eurostat_fli_oth_gdp yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & (worldbank_code=="BEL" | worldbank_code=="ESP" | worldbank_code=="FRA" | worldbank_code=="GBR" | worldbank_code=="NLD" | worldbank_code=="PRT") & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+    regsave using "Stata_temp/model6_1.dta", detail(all) replace table(NetLiabilities_Original, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
 
+xtreg eurostat_fli_oth_gdp yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & (worldbank_code=="BEL" | worldbank_code=="ESP" | worldbank_code=="FRA" | worldbank_code=="GBR" | worldbank_code=="NLD" | worldbank_code=="PRT") & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+regsave using "Stata_temp/model6_2.dta", detail(all) replace table(NetLiabilities_Corrected, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
+********************************************************************************
 
 
 ******************
 *** Appendices ***
 ******************
 
+**** Note: Not Replicated with corrected election data
 
 *** Appendix 6 ***
 
