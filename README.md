@@ -40,5 +40,5 @@ Stata data file with one addition: the corrected **yrcurnt** variable **yrcurnt_
 - [data_source/sup003_updated.do](data_source/sup003_updated.do) the Stata do-file
 with source to run both the original and replication analyses.
 
-- [detailed_results/Alt_et_al_2014_detailed_results.pdf](detailed_results/Alt_et_al_2014_detailed_results.Rmd):
+- [detailed_results/Alt_et_al_2014_detailed_results.pdf](detailed_results/Alt_et_al_2014_detailed_results.pdf):
 a write up of the replication with biased and corrected results tables.
