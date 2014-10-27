@@ -1,7 +1,7 @@
 ---
 title: "Replication of Alt et al. (2014) with Corrected Election Timing Data"
 author: "Christopher Gandrud"
-date: "25 September 2014"
+date: "27 October 2014"
 output: pdf_document
 bibliography: rep.bib
 ---
@@ -33,11 +33,12 @@ for (i in files){
 #### Create individual comparative tables ####
 
 # Clean up variable names
-from <- c(comb[grep('*_coef', comb), 1][1:9], '^.*?_stderr')
+from <- c(comb[grep('*_coef', comb), 1][1:9], '^.*?_stderr', 'N_clust')
 to <- c('Electoral Term', 'Electoral term x Budget transparency',
               'SGP', 'SGP x Budget transparency', 'Slump',
               'Slump x Budget transparency', 'Boom',
-              'Boom x Budget transparency','Banking crisis', '')
+              'Boom x Budget transparency','Banking crisis', '', 
+              'No. of Countries')
 replacements <- data.frame(from, to)
 
 table_clean <- function(x){
@@ -47,12 +48,12 @@ table_clean <- function(x){
     return(x)
 }
 
-balance <- comb[1:18, c(1, 2, 4)] %>% table_clean()
-debt_change <- comb[1:18, c(1, 6, 8)] %>% table_clean()
-sfa <- comb[1:18, c(1, 10, 12)] %>% table_clean()
-sfa_noGreece <- comb[1:18, c(1, 14, 16)] %>% table_clean()
-net_acq <- comb[1:18, c(1, 18, 20)] %>% table_clean()
-net_liab <- comb[1:18, c(1, 22, 24)] %>% table_clean()
+balance <- comb[c(1:18, 54, 58), c(1, 2, 4)] %>% table_clean()
+debt_change <- comb[c(1:18, 54, 58), c(1, 6, 8)] %>% table_clean()
+sfa <- comb[c(1:18, 54, 58), c(1, 10, 12)] %>% table_clean()
+sfa_noGreece <- comb[c(1:18, 54, 58), c(1, 14, 16)] %>% table_clean()
+net_acq <- comb[c(1:18, 54, 58), c(1, 18, 20)] %>% table_clean()
+net_liab <- comb[c(1:18, 54, 58), c(1, 22, 24)] %>% table_clean()
 ```
 
 ```{r, include=FALSE}

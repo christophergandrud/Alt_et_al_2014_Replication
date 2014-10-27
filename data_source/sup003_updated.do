@@ -3,7 +3,7 @@
 
 ********************************************************************************
 **** Updated by Christopher Gandrud
-**** 25 September 2014
+**** 27 October 2014
 **** With corrected yrcurnt data
 **** See https://github.com/christophergandrud/yrcurnt_corrected
 **** Using Stata 12.1
@@ -68,7 +68,7 @@ xtreg sfa_new dpi_yrcurnt yrcurnt_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 bo
 ********** Added in Replication 25 September 2014 ******************************
     regsave using "Stata_temp/model4_1.dta", detail(all) replace table(SFA_NoGreece_Original, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
 
-xtreg sfa_new obi3 yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & worldbank_code~="GRC" & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
+xtreg sfa_new yrcurnt_corrected yrcurnt_corrected_obi3 sgp sgp_obi3 slump2 slump2_obi3 booml3 booml3_obi3 lv_crisis_dummy y31 y33-y47 if emu15==1 & worldbank_code~="GRC" & weber_inflation < 20 & year<2008 & year>1989 & l.sfa_new~=. & l.balance_gdp_edf~=. & l.debt_gdp_change~=., fe cluster(country2)
     regsave using "Stata_temp/model4_2.dta", detail(all) replace table(SFA_NoGreece_Corrected, order(regvars r2) format(%5.2f) paren(stderr) asterisk())
 ********************************************************************************
 
