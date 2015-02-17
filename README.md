@@ -19,7 +19,7 @@ fiscal transparency).
 
 However, this variable has a number of problems that reduce its reliability and
 validity of the variable as a measure of government election timing. See
-[Gandrud (2014)](https://github.com/christophergandrud/yrcurnt_corrected)
+[Gandrud](https://github.com/christophergandrud/yrcurnt_corrected)
 for details.
 
 ## Summary
